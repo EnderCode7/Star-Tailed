@@ -4,67 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Star Tailed</title>
+
     <style>
+        /* Animated Gradient Background */
         body {
-            background-color: #FF7300;
-            background-image: linear-gradient(50deg, #EAA130 35%, #EFFF00 100%);
-            color: #EFFF00;
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
             min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            background: linear-gradient(45deg, #FF7300, #EAA130, #EFFF00, #f093fb, #764ba2);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
         }
-        
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
             text-align: center;
         }
-        
+
         h1 {
-            font-size: 3em;
+            font-size: 3.2em;
             margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
         }
-        
+
         p {
-            font-size: 1.2em;
+            font-size: 1.3em;
             line-height: 1.6;
             margin: 15px 0;
         }
-        
+
         button {
-            background-color: #000000;
-            color: white;
+            background-color: #000;
+            color: #fff;
             border: none;
-            padding: 10px 20px;
-            font-size: 1em;
-            border-radius: 5px;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border-radius: 6px;
             cursor: pointer;
             margin: 10px;
+            transition: 0.3s;
         }
-        
+
         button:hover {
             background-color: #764ba2;
+            transform: scale(1.05);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Welcome to The Star-Tailed!</h1>
         <p>Made by EnderCode7.</p>
         <p>I can put whatever dumb shit I want here.</p>
-        
+
         <button onclick="alert('You clicked me!')">Click Me</button>
-        <button onclick="changeBackground()">Change Background</button>
     </div>
-    
-    <script>
-        function changeBackground() {
-            const colors = ['#667eea', '#f093fb', '#4facfe', '#00f2fe', '#43e97b'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.body.style.backgroundImage = `linear-gradient(135deg, ${randomColor} 0%, #764ba2 100%)`;
-        }
-    </script>
 </body>
 </html>
