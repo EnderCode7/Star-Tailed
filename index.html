@@ -6,7 +6,7 @@
     <title>Star Tailed</title>
 
     <style>
-        /* Animated Gradient Background */
+        /* Base Reset + Gradient */
         body {
             margin: 0;
             padding: 20px;
@@ -25,6 +25,40 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* PARALLAX NEBULA LAYERS */
+        .nebula-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.25;
+            pointer-events: none;
+            animation: drift 60s linear infinite;
+        }
+
+        .nebula-back {
+            background-image: radial-gradient(circle at 30% 70%, rgba(255,150,0,0.4), transparent 60%);
+            animation-duration: 90s;
+        }
+
+        .nebula-mid {
+            background-image: radial-gradient(circle at 70% 40%, rgba(255,80,0,0.35), transparent 60%);
+            animation-duration: 60s;
+        }
+
+        .nebula-front {
+            background-image: radial-gradient(circle at 50% 50%, rgba(255,200,0,0.3), transparent 70%);
+            animation-duration: 40s;
+        }
+
+        @keyframes drift {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(10%, 10%); }
+        }
+
         /* Floating Stars */
         .star {
             position: absolute;
@@ -37,22 +71,8 @@
         }
 
         @keyframes floatUp {
-            from {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-120vh);
-                opacity: 0;
-            }
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 10;
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-120vh); opacity: 0; }
         }
 
         /* Neon Glow Text */
@@ -66,24 +86,12 @@
                 0 0 80px #ffdd55;
         }
 
-        /* Typewriter Effect */
-        #typewriter {
-            font-size: 1.4em;
-            margin-top: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 3px solid #fff;
-            width: 0;
-            animation: typing 4s steps(40) forwards, blink 0.7s infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
         h1 {
@@ -93,7 +101,6 @@
 
         p {
             font-size: 1.3em;
-            line-height: 1.6;
             margin: 15px 0;
         }
 
@@ -117,31 +124,22 @@
 </head>
 
 <body>
+
+    <!-- Parallax Nebula Layers -->
+    <div class="nebula-layer nebula-back"></div>
+    <div class="nebula-layer nebula-mid"></div>
+    <div class="nebula-layer nebula-front"></div>
+
     <div class="container">
         <h1 class="neon">Welcome to The Star-Tailed!</h1>
 
-        <div id="typewriter"></div>
-
-        <p class="neon">Made by EnderCode7.</p>
-        <p>I can put whatever dumb shit I want here.</p>
+        <p class="neon">A cosmic place to relax...</p>
+        <p>Made by EnderCode7.</p>
 
         <button onclick="alert('You clicked me!')">Click Me</button>
     </div>
 
     <script>
-        /* Typewriter Text */
-        const text = "A cosmic place where chaos and creativity collide...";
-        let i = 0;
-
-        function typeWriter() {
-            if (i < text.length) {
-                document.getElementById("typewriter").textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 60);
-            }
-        }
-        typeWriter();
-
         /* Floating Stars */
         function createStar() {
             const star = document.createElement("div");
@@ -158,12 +156,11 @@
 
             document.body.appendChild(star);
 
-            setTimeout(() => {
-                star.remove();
-            }, 10000);
+            setTimeout(() => star.remove(), 10000);
         }
 
         setInterval(createStar, 200);
     </script>
+
 </body>
 </html>
