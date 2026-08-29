@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Webpage</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        
+        button {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        button:hover {
+            background-color: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to My Webpage!</h1>
+        <p>This is some text on my webpage.</p>
+        <p>I can put whatever dumb shit I want here.</p>
+        
+        <button onclick="alert('You clicked me!')">Click Me</button>
+        <button onclick="changeBackground()">Change Background</button>
+    </div>
+    
+    <script>
+        function changeBackground() {
+            const colors = ['#667eea', '#f093fb', '#4facfe', '#00f2fe', '#43e97b'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundImage = `linear-gradient(135deg, ${randomColor} 0%, #764ba2 100%)`;
+        }
+    </script>
+</body>
+</html>
