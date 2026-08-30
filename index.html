@@ -154,7 +154,7 @@
     </audio>
 
     <!-- Throwable Image -->
-    <img id="bouncer" src="Untitled7_20260822213709.png">
+    <img id="bouncer" src="your-image.png">
 
     <div class="container">
         <h1 class="neon">Welcome to The Star-Tailed!</h1>
@@ -194,7 +194,7 @@
 
         setInterval(createStar, 200);
 
-        /* Physics-Based Draggable + Throwable Image */
+        /* FIXED Physics-Based Draggable + Throwable Image */
         const img = document.getElementById("bouncer");
 
         let x = 200, y = 200;
@@ -204,8 +204,8 @@
         let grabOffsetX = 0;
         let grabOffsetY = 0;
 
-        let lastMouseX = 0;
-        let lastMouseY = 0;
+        let velX = 0;
+        let velY = 0;
 
         /* Prevent browser dragging */
         img.addEventListener("dragstart", (e) => {
@@ -242,35 +242,36 @@
             grabOffsetX = e.clientX - rect.left;
             grabOffsetY = e.clientY - rect.top;
 
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-
             dx = 0;
             dy = 0;
         });
 
         document.addEventListener("mousemove", (e) => {
             if (dragging) {
+                velX = e.movementX;
+                velY = e.movementY;
+
                 x = e.clientX - grabOffsetX;
                 y = e.clientY - grabOffsetY;
 
                 img.style.left = x + "px";
                 img.style.top = y + "px";
-
-                lastMouseX = e.clientX;
-                lastMouseY = e.clientY;
             }
         });
 
-        document.addEventListener("mouseup", (e) => {
+        document.addEventListener("mouseup", () => {
             if (dragging) {
                 dragging = false;
 
-                dx = (e.clientX - lastMouseX) * 0.5;
-                dy = (e.clientY - lastMouseY) * 0.5;
+                dx = velX * 1.2;
+                dy = velY * 1.2;
             }
         });
     </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
