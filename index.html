@@ -6,7 +6,7 @@
     <title>Star Tailed</title>
 
     <style>
-        /* Base Reset + Gradient */
+        /* Animated Gradient Background */
         body {
             margin: 0;
             padding: 20px;
@@ -120,6 +120,15 @@
             background-color: #764ba2;
             transform: scale(1.05);
         }
+
+        /* Bouncing Image */
+        #bouncer {
+            position: absolute;
+            width: 120px;
+            height: auto;
+            z-index: 20;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -129,6 +138,14 @@
     <div class="nebula-layer nebula-back"></div>
     <div class="nebula-layer nebula-mid"></div>
     <div class="nebula-layer nebula-front"></div>
+
+    <!-- Background Music -->
+    <audio id="bgMusic" autoplay loop muted>
+        <source src="your-music-file.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Bouncing Image -->
+    <img id="bouncer" src="Untitled7_20260822213709.png">
 
     <div class="container">
         <h1 class="neon">Welcome to The Star-Tailed!</h1>
@@ -140,6 +157,13 @@
     </div>
 
     <script>
+        /* Enable audio after first user interaction */
+        document.addEventListener("click", () => {
+            const music = document.getElementById("bgMusic");
+            music.muted = false;
+            music.play();
+        }, { once: true });
+
         /* Floating Stars */
         function createStar() {
             const star = document.createElement("div");
@@ -160,6 +184,40 @@
         }
 
         setInterval(createStar, 200);
+
+        /* Bouncing Image + Mouse Attraction */
+        const img = document.getElementById("bouncer");
+
+        let x = 200;
+        let y = 200;
+        let dx = 2.5;
+        let dy = 2.5;
+
+        function bounce() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+
+            x += dx;
+            y += dy;
+
+            if (x <= 0 || x + img.width >= w) dx *= -1;
+            if (y <= 0 || y + img.height >= h) dy *= -1;
+
+            img.style.left = x + "px";
+            img.style.top = y + "px";
+
+            requestAnimationFrame(bounce);
+        }
+
+        bounce();
+
+        document.addEventListener("mousemove", (e) => {
+            const mx = e.clientX;
+            const my = e.clientY;
+
+            dx += (mx - x) * 0.0005;
+            dy += (my - y) * 0.0005;
+        });
     </script>
 
 </body>
