@@ -41,7 +41,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Warm Neon Glow (fixed so gradient shows) */
+        /* Warm Neon Glow */
         .neon {
             text-shadow:
                 0 0 6px #ffdd55,
@@ -189,7 +189,7 @@
             cursor: grabbing;
         }
 
-        /* Floating Text */
+        /* Floating Text (enhanced) */
         .floating-text {
             position: absolute;
             font-size: 1.1em;
@@ -201,11 +201,12 @@
             -webkit-text-fill-color: transparent;
 
             animation: floatText 18s linear infinite;
+            opacity: 0;
         }
 
         @keyframes floatText {
             0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 0.8; }
+            10% { opacity: 0.9; }
             50% { transform: translateY(-40px); opacity: 0.7; }
             90% { opacity: 0.0; }
             100% { transform: translateY(-60px); opacity: 0; }
@@ -240,7 +241,7 @@
     <!-- Throwable Image -->
     <img id="bouncer" src="Untitled7_20260822213709.png">
 
-    <!-- Floating Text -->
+    <!-- Initial Floating Text -->
     <div class="floating-text" style="left: 10%; top: 70%;">Relax among the stars...</div>
     <div class="floating-text" style="left: 70%; top: 30%; animation-delay: 6s;">Gravity is optional here.</div>
     <div class="floating-text" style="left: 40%; top: 80%; animation-delay: 12s;">Welcome, traveler.</div>
@@ -320,6 +321,40 @@
         }
 
         setInterval(createShootingStar, 8000);
+
+        /* Enhanced Floating Text System */
+        const floatingMessages = [
+            "Relax among the stars...",
+            "Gravity is optional here.",
+            "Welcome, traveler.",
+            "The cosmos is listening.",
+            "Drift with the nebula...",
+            "Your journey begins now.",
+            "Silence is a superpower.",
+            "The void is peaceful tonight.",
+            "Dreams glow brighter in space.",
+            "Follow the drifting lights...",
+            "You are weightless here.",
+            "Let the universe breathe."
+        ];
+
+        function spawnFloatingText() {
+            const msg = floatingMessages[Math.floor(Math.random() * floatingMessages.length)];
+            const text = document.createElement("div");
+            text.classList.add("floating-text");
+            text.innerText = msg;
+
+            text.style.left = Math.random() * 80 + "%";
+            text.style.top = Math.random() * 80 + "%";
+            text.style.animationDelay = (Math.random() * 12) + "s";
+
+            document.body.appendChild(text);
+
+            setTimeout(() => text.remove(), 18000);
+        }
+
+        setInterval(spawnFloatingText, 3000);
+        for (let i = 0; i < 5; i++) spawnFloatingText();
 
         /* Throwable Ball Physics + Squash & Stretch */
         const img = document.getElementById("bouncer");
