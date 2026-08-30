@@ -116,6 +116,15 @@ body {
     100% { transform: translateY(-110vh); opacity: 0; }
 }
 
+/* ===== STAR SUCK EFFECT ===== */
+@keyframes starPull {
+    0% { transform: translate(0, 0); opacity: 1; }
+    100% { transform: translate(-20px, -20px); opacity: 0.6; }
+}
+.star.pulled {
+    animation: starPull 1s ease forwards;
+}
+
 /* ===== COSMIC DUST ===== */
 .dust {
     position: absolute;
@@ -397,12 +406,25 @@ img.addEventListener("touchend",()=>{
     if(drag){ drag=false; dx=vx*0.4; dy=vy*0.4; }
 });
 
+/* ===== STAR SUCK FUNCTION ===== */
+function suckStars() {
+    const stars = document.querySelectorAll(".star");
+    stars.forEach(star => {
+        star.classList.add("pulled");
+        setTimeout(() => star.classList.remove("pulled"), 1200);
+    });
+}
+
 /* ===== BLACK HOLE BUTTON EFFECT ===== */
 function spawnBlackHole() {
     document.body.classList.add("blackhole-distort");
+
     const hole=document.createElement("div");
     hole.className="black-hole";
     document.body.appendChild(hole);
+
+    suckStars(); // makes it suck a little
+
     setTimeout(()=>{
         hole.remove();
         document.body.classList.remove("blackhole-distort");
