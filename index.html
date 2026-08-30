@@ -521,3 +521,35 @@
 
             grabOffsetX = touch.clientX - rect.left;
             grabOffsetY = touch
+            grabOffsetY = touch.clientY - rect.top;
+
+            dx = 0;
+            dy = 0;
+        });
+
+        img.addEventListener("touchmove", (e) => {
+            if (dragging) {
+                const touch = e.touches[0];
+
+                velX = touch.clientX - x;
+                velY = touch.clientY - y;
+
+                x = touch.clientX - grabOffsetX;
+                y = touch.clientY - grabOffsetY;
+
+                img.style.left = x + "px";
+                img.style.top = y + "px";
+            }
+        });
+
+        img.addEventListener("touchend", () => {
+            if (dragging) {
+                dragging = false;
+                dx = velX * 0.4;
+                dy = velY * 0.4;
+            }
+        });
+    </script>
+
+</body>
+</html>
