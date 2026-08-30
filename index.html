@@ -154,7 +154,7 @@
     </audio>
 
     <!-- Throwable Image -->
-    <img id="bouncer" src="your-image.png">
+    <img id="bouncer" src="Untitled7_20260822213709.png">
 
     <div class="container">
         <h1 class="neon">Welcome to The Star-Tailed!</h1>
@@ -194,7 +194,7 @@
 
         setInterval(createStar, 200);
 
-        /* FIXED Physics-Based Draggable + Throwable Image */
+        /* Physics-Based Draggable + Throwable Image (Mouse + Touch) */
         const img = document.getElementById("bouncer");
 
         let x = 200, y = 200;
@@ -208,16 +208,14 @@
         let velY = 0;
 
         /* Prevent browser dragging */
-        img.addEventListener("dragstart", (e) => {
-            e.preventDefault();
-        });
+        img.addEventListener("dragstart", (e) => e.preventDefault());
 
         function physicsLoop() {
             if (!dragging) {
                 x += dx;
                 y += dy;
 
-                dx *= 0.99;  // friction
+                dx *= 0.99;
                 dy *= 0.99;
 
                 const w = window.innerWidth;
@@ -234,11 +232,11 @@
         }
         physicsLoop();
 
+        /* MOUSE EVENTS */
         img.addEventListener("mousedown", (e) => {
             dragging = true;
 
             const rect = img.getBoundingClientRect();
-
             grabOffsetX = e.clientX - rect.left;
             grabOffsetY = e.clientY - rect.top;
 
@@ -262,16 +260,48 @@
         document.addEventListener("mouseup", () => {
             if (dragging) {
                 dragging = false;
-
                 dx = velX * 1.2;
                 dy = velY * 1.2;
             }
         });
+
+        /* TOUCH EVENTS (for phones/tablets) */
+        img.addEventListener("touchstart", (e) => {
+            dragging = true;
+
+            const touch = e.touches[0];
+            const rect = img.getBoundingClientRect();
+
+            grabOffsetX = touch.clientX - rect.left;
+            grabOffsetY = touch.clientY - rect.top;
+
+            dx = 0;
+            dy = 0;
+        });
+
+        img.addEventListener("touchmove", (e) => {
+            if (dragging) {
+                const touch = e.touches[0];
+
+                velX = touch.clientX - x;
+                velY = touch.clientY - y;
+
+                x = touch.clientX - grabOffsetX;
+                y = touch.clientY - grabOffsetY;
+
+                img.style.left = x + "px";
+                img.style.top = y + "px";
+            }
+        });
+
+        img.addEventListener("touchend", () => {
+            if (dragging) {
+                dragging = false;
+                dx = velX * 0.4;
+                dy = velY * 0.4;
+            }
+        });
     </script>
-
-</body>
-</html>
-
 
 </body>
 </html>
