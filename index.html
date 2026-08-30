@@ -92,9 +92,7 @@ body {
     animation: textGlow 6s ease infinite;
 }
 @keyframes textGlow {
-    0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 .neon {
     text-shadow:
@@ -115,8 +113,7 @@ body {
     animation: floatUp linear infinite;
 }
 @keyframes floatUp {
-    from { transform: translateY(0); opacity: 0.9; }
-    to { transform: translateY(-110vh); opacity: 0; }
+    100% { transform: translateY(-110vh); opacity: 0; }
 }
 
 /* ===== COSMIC DUST ===== */
@@ -131,8 +128,7 @@ body {
     z-index: 0;
 }
 @keyframes dustDrift {
-    from { transform: translate(0, 0); opacity: 0.4; }
-    to { transform: translate(40px, -40px); opacity: 0.1; }
+    100% { transform: translate(40px, -40px); opacity: 0.1; }
 }
 
 /* ===== SHOOTING STARS ===== */
@@ -148,7 +144,6 @@ body {
     animation: shoot linear forwards;
 }
 @keyframes shoot {
-    0% { opacity: 0; transform: translate(0, 0); }
     10% { opacity: 0.8; }
     100% { opacity: 0; transform: translate(200px, -200px); }
 }
@@ -166,22 +161,18 @@ body {
     opacity: 0;
 }
 @keyframes floatText {
-    0% { transform: translateY(0); opacity: 0; }
     10% { opacity: 0.9; }
     50% { transform: translateY(-40px); opacity: 0.7; }
-    90% { opacity: 0.0; }
-    100% { transform: translateY(-60px); opacity: 0; }
+    100% { opacity: 0; transform: translateY(-60px); }
 }
 
 /* ===== BOUNCER IMAGE ===== */
 #bouncer {
     position: absolute;
     width: 120px;
-    height: auto;
     z-index: 20;
     cursor: grab;
     user-select: none;
-    -webkit-user-select: none;
     transition: transform 0.12s ease-out;
 }
 #bouncer:active { cursor: grabbing; }
@@ -199,6 +190,32 @@ body {
     transform: translateX(-50%);
     z-index: 3;
     pointer-events: none;
+}
+
+/* ===== BLACK HOLE EFFECT ===== */
+.black-hole {
+    position: fixed;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, black, #0a0a0a 40%, transparent 70%);
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    animation: blackHoleSpin 2.5s linear forwards;
+    pointer-events: none;
+    z-index: 999;
+}
+@keyframes blackHoleSpin {
+    0% { transform: translate(-50%, -50%) scale(0.2) rotate(0deg); opacity: 0.8; }
+    40% { transform: translate(-50%, -50%) scale(1.2) rotate(180deg); opacity: 1; }
+    80% { transform: translate(-50%, -50%) scale(0.8) rotate(360deg); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(0.1) rotate(540deg); opacity: 0; }
+}
+body.blackhole-distort {
+    filter: blur(2px) brightness(0.8);
+    transition: filter 0.3s ease;
 }
 
 /* ===== CONTAINER ===== */
@@ -242,62 +259,56 @@ body {
     <h1 class="gradient-text neon">Welcome to The Star-Tailed!</h1>
     <p class="gradient-text neon">A cosmic place to relax...</p>
     <p class="gradient-text">Made by EnderCode7.</p>
-    <button onclick="alert('You clicked me!')">Click Me</button>
+
+    <!-- BLACK HOLE BUTTON -->
+    <button onclick="spawnBlackHole()">Click Me</button>
 </div>
 
 <script>
-/* Enable audio after first user interaction */
+/* Enable audio */
 document.addEventListener("click", () => {
-    const music = document.getElementById("bgMusic");
-    music.muted = false;
-    music.play();
+    const m = document.getElementById("bgMusic");
+    m.muted = false;
+    m.play();
 }, { once: true });
 
 /* Floating Stars */
-function createStar() {
-    const star = document.createElement("div");
-    star.classList.add("star");
-    star.style.left = Math.random() * 100 + "vw";
-    star.style.animationDuration = (8 + Math.random() * 10) + "s";
-    const size = Math.random() * 2 + 1;
-    star.style.width = size + "px";
-    star.style.height = size + "px";
-    star.style.top = Math.random() * 100 + "vh";
-    document.body.appendChild(star);
-    setTimeout(() => star.remove(), 16000);
-}
-setInterval(createStar, 500);
+setInterval(() => {
+    const s = document.createElement("div");
+    s.className = "star";
+    s.style.left = Math.random()*100+"vw";
+    s.style.top = Math.random()*100+"vh";
+    s.style.animationDuration = (8+Math.random()*10)+"s";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),16000);
+}, 500);
 
 /* Cosmic Dust */
 function createDust() {
-    const dust = document.createElement("div");
-    dust.classList.add("dust");
-    dust.style.left = Math.random() * 100 + "vw";
-    dust.style.top = Math.random() * 100 + "vh";
-    dust.style.animationDuration = (20 + Math.random() * 20) + "s";
-    document.body.appendChild(dust);
-    setTimeout(() => dust.remove(), 40000);
+    const d=document.createElement("div");
+    d.className="dust";
+    d.style.left=Math.random()*100+"vw";
+    d.style.top=Math.random()*100+"vh";
+    d.style.animationDuration=(20+Math.random()*20)+"s";
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),40000);
 }
-for (let i = 0; i < 40; i++) createDust();
-setInterval(createDust, 5000);
+for(let i=0;i<40;i++)createDust();
+setInterval(createDust,5000);
 
 /* Shooting Stars */
-function createShootingStar() {
-    const star = document.createElement("div");
-    star.classList.add("shooting-star");
-    const startX = Math.random() * window.innerWidth * 0.8;
-    const startY = Math.random() * window.innerHeight * 0.4;
-    star.style.left = startX + "px";
-    star.style.top = startY + "px";
-    const duration = 2 + Math.random() * 2;
-    star.style.animationDuration = duration + "s";
-    document.body.appendChild(star);
-    setTimeout(() => star.remove(), duration * 1000);
-}
-setInterval(createShootingStar, 8000);
+setInterval(()=>{
+    const s=document.createElement("div");
+    s.className="shooting-star";
+    s.style.left=Math.random()*innerWidth*0.8+"px";
+    s.style.top=Math.random()*innerHeight*0.4+"px";
+    s.style.animationDuration=(2+Math.random()*2)+"s";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),3000);
+},8000);
 
-/* Enhanced Floating Text System */
-const floatingMessages = [
+/* Floating Text */
+const msgs=[
     "Relax among the stars...",
     "Gravity is optional here.",
     "Welcome, traveler.",
@@ -311,134 +322,103 @@ const floatingMessages = [
     "You are weightless here.",
     "Let the universe breathe."
 ];
-function spawnFloatingText() {
-    const msg = floatingMessages[Math.floor(Math.random() * floatingMessages.length)];
-    const text = document.createElement("div");
-    text.classList.add("floating-text");
-    text.innerText = msg;
-    text.style.left = Math.random() * 80 + "%";
-    text.style.top = Math.random() * 80 + "%";
-    text.style.animationDelay = (Math.random() * 12) + "s";
-    document.body.appendChild(text);
-    setTimeout(() => text.remove(), 18000);
+function spawnFloatingText(){
+    const t=document.createElement("div");
+    t.className="floating-text";
+    t.innerText=msgs[Math.floor(Math.random()*msgs.length)];
+    t.style.left=Math.random()*80+"%";
+    t.style.top=Math.random()*80+"%";
+    t.style.animationDelay=(Math.random()*12)+"s";
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),18000);
 }
-setInterval(spawnFloatingText, 3000);
-for (let i = 0; i < 5; i++) spawnFloatingText();
+setInterval(spawnFloatingText,3000);
+for(let i=0;i<5;i++)spawnFloatingText();
 
-/* Throwable Ball Physics + Squash & Stretch */
-const img = document.getElementById("bouncer");
-let x = 200, y = 200;
-let dx = 2.5, dy = 2.5;
-let dragging = false;
-let grabOffsetX = 0, grabOffsetY = 0;
-let velX = 0, velY = 0;
+/* Bouncer Physics */
+const img=document.getElementById("bouncer");
+let x=200,y=200,dx=2.5,dy=2.5,drag=false,offX=0,offY=0,vx=0,vy=0;
 
-img.addEventListener("dragstart", (e) => e.preventDefault());
+img.addEventListener("dragstart",e=>e.preventDefault());
 
-function applySquashStretch(axis) {
-    if (axis === "x") {
-        img.style.transform = "scaleX(1.15) scaleY(0.9)";
-    } else {
-        img.style.transform = "scaleX(0.9) scaleY(1.15)";
-    }
-    setTimeout(() => {
-        img.style.transform = "scaleX(1) scaleY(1)";
-    }, 120);
+function squash(axis){
+    img.style.transform = axis==="x" ? "scaleX(1.15) scaleY(0.9)" : "scaleX(0.9) scaleY(1.15)";
+    setTimeout(()=>img.style.transform="scaleX(1) scaleY(1)",120);
 }
 
-function physicsLoop() {
-    if (!dragging) {
-        x += dx;
-        y += dy;
-        dx *= 0.99;
-        dy *= 0.99;
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        let collidedX = false;
-        let collidedY = false;
-        if (x <= 0 || x + img.width >= w) {
-            dx *= -1;
-            collidedX = true;
-        }
-        if (y <= 0 || y + img.height >= h) {
-            dy *= -1;
-            collidedY = true;
-        }
-        if (collidedX) applySquashStretch("x");
-        if (collidedY) applySquashStretch("y");
-        img.style.left = x + "px";
-        img.style.top = y + "px";
+function loop(){
+    if(!drag){
+        x+=dx; y+=dy;
+        dx*=0.99; dy*=0.99;
+        const w=innerWidth,h=innerHeight;
+        if(x<=0||x+img.width>=w){dx*=-1; squash("x");}
+        if(y<=0||y+img.height>=h){dy*=-1; squash("y");}
+        img.style.left=x+"px";
+        img.style.top=y+"px";
     }
-    requestAnimationFrame(physicsLoop);
+    requestAnimationFrame(loop);
 }
-physicsLoop();
+loop();
 
-/* Mouse Events */
-img.addEventListener("mousedown", (e) => {
-    dragging = true;
-    const rect = img.getBoundingClientRect();
-    grabOffsetX = e.clientX - rect.left;
-    grabOffsetY = e.clientY - rect.top;
-    dx = 0;
-    dy = 0;
+img.addEventListener("mousedown",e=>{
+    drag=true;
+    const r=img.getBoundingClientRect();
+    offX=e.clientX-r.left;
+    offY=e.clientY-r.top;
+    dx=dy=0;
 });
-document.addEventListener("mousemove", (e) => {
-    if (dragging) {
-        velX = e.movementX;
-        velY = e.movementY;
-        x = e.clientX - grabOffsetX;
-        y = e.clientY - grabOffsetY;
-        img.style.left = x + "px";
-        img.style.top = y + "px";
+document.addEventListener("mousemove",e=>{
+    if(drag){
+        vx=e.movementX; vy=e.movementY;
+        x=e.clientX-offX; y=e.clientY-offY;
+        img.style.left=x+"px"; img.style.top=y+"px";
     }
 });
-document.addEventListener("mouseup", () => {
-    if (dragging) {
-        dragging = false;
-        dx = velX * 1.1;
-        dy = velY * 1.1;
-    }
+document.addEventListener("mouseup",()=>{
+    if(drag){ drag=false; dx=vx*1.1; dy=vy*1.1; }
 });
 
-/* Touch Events */
-img.addEventListener("touchstart", (e) => {
-    dragging = true;
-    const touch = e.touches[0];
-    const rect = img.getBoundingClientRect();
-    grabOffsetX = touch.clientX - rect.left;
-    grabOffsetY = touch.clientY - rect.top;
-    dx = 0;
-    dy = 0;
+/* Touch */
+img.addEventListener("touchstart",e=>{
+    drag=true;
+    const t=e.touches[0],r=img.getBoundingClientRect();
+    offX=t.clientX-r.left; offY=t.clientY-r.top;
+    dx=dy=0;
 });
-img.addEventListener("touchmove", (e) => {
-    if (dragging) {
-        const touch = e.touches[0];
-        velX = touch.clientX - x;
-        velY = touch.clientY - y;
-        x = touch.clientX - grabOffsetX;
-        y = touch.clientY - grabOffsetY;
-        img.style.left = x + "px";
-        img.style.top = y + "px";
+img.addEventListener("touchmove",e=>{
+    if(drag){
+        const t=e.touches[0];
+        vx=t.clientX-x; vy=t.clientY-y;
+        x=t.clientX-offX; y=t.clientY-offY;
+        img.style.left=x+"px"; img.style.top=y+"px";
     }
 });
-img.addEventListener("touchend", () => {
-    if (dragging) {
-        dragging = false;
-        dx = velX * 0.4;
-        dy = velY * 0.4;
-    }
+img.addEventListener("touchend",()=>{
+    if(drag){ drag=false; dx=vx*0.4; dy=vy*0.4; }
 });
 
-/* Single Moon 3D Orbit */
-const moon = document.getElementById("orbit-moon");
-let angle = 0;
-function orbitMoon() {
-    angle += 0.01; // orbit speed
-    const radius = 180;
-    const xOff = Math.cos(angle) * radius;
-    const yOff = Math.sin(angle) * (radius * 0.4); // flattened for horizon feel
-    const scale = 0.7 + (Math.sin(angle) * 0.3); // fake 3D depth
-    moon.style.transform = `
+/* ===== BLACK HOLE BUTTON EFFECT ===== */
+function spawnBlackHole() {
+    document.body.classList.add("blackhole-distort");
+    const hole=document.createElement("div");
+    hole.className="black-hole";
+    document.body.appendChild(hole);
+    setTimeout(()=>{
+        hole.remove();
+        document.body.classList.remove("blackhole-distort");
+    },2500);
+}
+
+/* ===== SINGLE MOON 3D ORBIT ===== */
+const moon=document.getElementById("orbit-moon");
+let angle=0;
+function orbitMoon(){
+    angle+=0.01;
+    const radius=180;
+    const xOff=Math.cos(angle)*radius;
+    const yOff=Math.sin(angle)*(radius*0.4);
+    const scale=0.7+(Math.sin(angle)*0.3);
+    moon.style.transform=`
         translateX(calc(-50% + ${xOff}px))
         translateY(${yOff}px)
         scale(${scale})
