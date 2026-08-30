@@ -16,13 +16,45 @@
             overflow: hidden;
             background: linear-gradient(45deg, #C7A400, #FFE600, #FF8A00, #C75A00);
             background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
+            animation: gradientMove 18s ease infinite;
         }
 
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        /* PARALLAX GALAXIES (deep background) */
+        .galaxy-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.15;
+            pointer-events: none;
+            animation: galaxyDrift 120s linear infinite;
+            z-index: -3;
+        }
+
+        .galaxy-back {
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15), transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(255,220,200,0.12), transparent 60%);
+        }
+
+        .galaxy-mid {
+            background-image:
+                radial-gradient(circle at 50% 20%, rgba(255,240,220,0.18), transparent 65%);
+            animation-duration: 90s;
+        }
+
+        @keyframes galaxyDrift {
+            from { transform: translate(-5%, -5%); }
+            to { transform: translate(5%, 5%); }
         }
 
         /* PARALLAX NEBULA LAYERS */
@@ -36,43 +68,80 @@
             background-size: cover;
             opacity: 0.25;
             pointer-events: none;
-            animation: drift 60s linear infinite;
+            animation: drift 80s linear infinite;
+            z-index: -2;
         }
 
         .nebula-back {
-            background-image: radial-gradient(circle at 30% 70%, rgba(255,150,0,0.4), transparent 60%);
-            animation-duration: 90s;
+            background-image: radial-gradient(circle at 30% 70%, rgba(255,150,0,0.35), transparent 60%);
+            animation-duration: 110s;
         }
 
         .nebula-mid {
-            background-image: radial-gradient(circle at 70% 40%, rgba(255,80,0,0.35), transparent 60%);
-            animation-duration: 60s;
+            background-image: radial-gradient(circle at 70% 40%, rgba(255,80,0,0.3), transparent 60%);
+            animation-duration: 80s;
         }
 
         .nebula-front {
-            background-image: radial-gradient(circle at 50% 50%, rgba(255,200,0,0.3), transparent 70%);
-            animation-duration: 40s;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255,200,0,0.25), transparent 70%);
+            animation-duration: 60s;
         }
 
         @keyframes drift {
-            from { transform: translate(-10%, -10%); }
-            to { transform: translate(10%, 10%); }
+            from { transform: translate(-6%, -6%); }
+            to { transform: translate(6%, 6%); }
         }
 
         /* Floating Stars */
         .star {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
             background: white;
             border-radius: 50%;
-            opacity: 0.8;
+            opacity: 0.7;
             animation: floatUp linear infinite;
         }
 
         @keyframes floatUp {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-120vh); opacity: 0; }
+            from { transform: translateY(0); opacity: 0.9; }
+            to { transform: translateY(-110vh); opacity: 0; }
+        }
+
+        /* Floating Cosmic Dust */
+        .dust {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: dustDrift linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes dustDrift {
+            from { transform: translate(0, 0); opacity: 0.4; }
+            to { transform: translate(40px, -40px); opacity: 0.1; }
+        }
+
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 0 0 8px rgba(255,255,255,0.8);
+            border-radius: 50%;
+            opacity: 0.0;
+            z-index: 0;
+            animation: shoot linear forwards;
+        }
+
+        @keyframes shoot {
+            0% { opacity: 0; transform: translate(0, 0); }
+            10% { opacity: 0.8; }
+            100% { opacity: 0; transform: translate(200px, -200px); }
         }
 
         /* Neon Glow Text */
@@ -121,7 +190,7 @@
             transform: scale(1.05);
         }
 
-        /* Throwable Image */
+        /* Throwable Image with Squash & Stretch */
         #bouncer {
             position: absolute;
             width: 120px;
@@ -129,19 +198,43 @@
             z-index: 20;
             cursor: grab;
 
-            /* Prevent browser dragging */
             user-drag: none;
             -webkit-user-drag: none;
             user-select: none;
             -webkit-user-select: none;
+
+            transition: transform 0.12s ease-out;
         }
         #bouncer:active {
             cursor: grabbing;
+        }
+
+        /* Floating Text Animations */
+        .floating-text {
+            position: absolute;
+            color: rgba(255,255,255,0.85);
+            font-size: 1.1em;
+            text-shadow: 0 0 6px rgba(255,255,255,0.7);
+            animation: floatText 18s linear infinite;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes floatText {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            50% { transform: translateY(-40px); opacity: 0.7; }
+            90% { opacity: 0.0; }
+            100% { transform: translateY(-60px); opacity: 0; }
         }
     </style>
 </head>
 
 <body>
+
+    <!-- Parallax Galaxies -->
+    <div class="galaxy-layer galaxy-back"></div>
+    <div class="galaxy-layer galaxy-mid"></div>
 
     <!-- Parallax Nebula Layers -->
     <div class="nebula-layer nebula-back"></div>
@@ -154,7 +247,12 @@
     </audio>
 
     <!-- Throwable Image -->
-    <img id="bouncer" src="Untitled7_20260822213709.png">
+    <img id="bouncer" src="your-image.png">
+
+    <!-- Floating Text (subtle, chill) -->
+    <div class="floating-text" style="left: 10%; top: 70%;">Relax among the stars...</div>
+    <div class="floating-text" style="left: 70%; top: 30%; animation-delay: 6s;">Gravity is optional here.</div>
+    <div class="floating-text" style="left: 40%; top: 80%; animation-delay: 12s;">Welcome, traveler.</div>
 
     <div class="container">
         <h1 class="neon">Welcome to The Star-Tailed!</h1>
@@ -179,9 +277,9 @@
             star.classList.add("star");
 
             star.style.left = Math.random() * 100 + "vw";
-            star.style.animationDuration = (4 + Math.random() * 6) + "s";
+            star.style.animationDuration = (8 + Math.random() * 10) + "s";
 
-            const size = Math.random() * 3 + 2;
+            const size = Math.random() * 2 + 1;
             star.style.width = size + "px";
             star.style.height = size + "px";
 
@@ -189,16 +287,56 @@
 
             document.body.appendChild(star);
 
-            setTimeout(() => star.remove(), 10000);
+            setTimeout(() => star.remove(), 16000);
         }
 
-        setInterval(createStar, 200);
+        setInterval(createStar, 500);
 
-        /* Physics-Based Draggable + Throwable Image (Mouse + Touch) */
+        /* Floating Cosmic Dust */
+        function createDust() {
+            const dust = document.createElement("div");
+            dust.classList.add("dust");
+
+            dust.style.left = Math.random() * 100 + "vw";
+            dust.style.top = Math.random() * 100 + "vh";
+            dust.style.animationDuration = (20 + Math.random() * 20) + "s";
+
+            document.body.appendChild(dust);
+
+            setTimeout(() => dust.remove(), 40000);
+        }
+
+        for (let i = 0; i < 40; i++) {
+            createDust();
+        }
+        setInterval(createDust, 5000);
+
+        /* Shooting Stars (subtle, rare) */
+        function createShootingStar() {
+            const star = document.createElement("div");
+            star.classList.add("shooting-star");
+
+            const startX = Math.random() * window.innerWidth * 0.8;
+            const startY = Math.random() * window.innerHeight * 0.4;
+
+            star.style.left = startX + "px";
+            star.style.top = startY + "px";
+
+            const duration = 2 + Math.random() * 2;
+            star.style.animationDuration = duration + "s";
+
+            document.body.appendChild(star);
+
+            setTimeout(() => star.remove(), duration * 1000);
+        }
+
+        setInterval(createShootingStar, 8000);
+
+        /* Physics-Based Draggable + Throwable Image (Mouse + Touch) + Squash & Stretch */
         const img = document.getElementById("bouncer");
 
         let x = 200, y = 200;
-        let dx = 3, dy = 3;
+        let dx = 2.5, dy = 2.5;
         let dragging = false;
 
         let grabOffsetX = 0;
@@ -207,8 +345,18 @@
         let velX = 0;
         let velY = 0;
 
-        /* Prevent browser dragging */
         img.addEventListener("dragstart", (e) => e.preventDefault());
+
+        function applySquashStretch(axis) {
+            if (axis === "x") {
+                img.style.transform = "scaleX(1.15) scaleY(0.9)";
+            } else {
+                img.style.transform = "scaleX(0.9) scaleY(1.15)";
+            }
+            setTimeout(() => {
+                img.style.transform = "scaleX(1) scaleY(1)";
+            }, 120);
+        }
 
         function physicsLoop() {
             if (!dragging) {
@@ -221,8 +369,20 @@
                 const w = window.innerWidth;
                 const h = window.innerHeight;
 
-                if (x <= 0 || x + img.width >= w) dx *= -1;
-                if (y <= 0 || y + img.height >= h) dy *= -1;
+                let collidedX = false;
+                let collidedY = false;
+
+                if (x <= 0 || x + img.width >= w) {
+                    dx *= -1;
+                    collidedX = true;
+                }
+                if (y <= 0 || y + img.height >= h) {
+                    dy *= -1;
+                    collidedY = true;
+                }
+
+                if (collidedX) applySquashStretch("x");
+                if (collidedY) applySquashStretch("y");
 
                 img.style.left = x + "px";
                 img.style.top = y + "px";
@@ -232,7 +392,7 @@
         }
         physicsLoop();
 
-        /* MOUSE EVENTS */
+        /* Mouse Events */
         img.addEventListener("mousedown", (e) => {
             dragging = true;
 
@@ -260,12 +420,12 @@
         document.addEventListener("mouseup", () => {
             if (dragging) {
                 dragging = false;
-                dx = velX * 1.2;
-                dy = velY * 1.2;
+                dx = velX * 1.1;
+                dy = velY * 1.1;
             }
         });
 
-        /* TOUCH EVENTS (for phones/tablets) */
+        /* Touch Events */
         img.addEventListener("touchstart", (e) => {
             dragging = true;
 
