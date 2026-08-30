@@ -140,6 +140,15 @@ body {
     100% { transform: translate(40px, -40px); opacity: 0.1; }
 }
 
+/* ===== DUST PULL ===== */
+@keyframes dustPull {
+    0% { transform: translate(0, 0); opacity: 0.4; }
+    100% { transform: translate(-25px, -25px); opacity: 0.15; }
+}
+.dust.pulled {
+    animation: dustPull 1s ease forwards;
+}
+
 /* ===== SHOOTING STARS ===== */
 .shooting-star {
     position: absolute;
@@ -201,30 +210,55 @@ body {
     pointer-events: none;
 }
 
-/* ===== BLACK HOLE EFFECT ===== */
-.black-hole {
+/* ===== MOON TUG ===== */
+@keyframes moonTug {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(calc(-50% - 25px)) scale(0.9); }
+    100% { transform: translateX(-50%) scale(1); }
+}
+#orbit-moon.tugged {
+    animation: moonTug 1.2s ease forwards;
+}
+
+/* ===== NEBULA WARP ===== */
+@keyframes nebulaWarp {
+    0% { transform: scale(1) translate(0,0); filter: blur(0px); }
+    50% { transform: scale(1.05) translate(-10px,-10px); filter: blur(2px); }
+    100% { transform: scale(1) translate(0,0); filter: blur(0px); }
+}
+.nebula-layer.warped {
+    animation: nebulaWarp 1.4s ease forwards;
+}
+
+/* ===== GALAXY DISTORT ===== */
+@keyframes galaxyDistort {
+    0% { transform: scale(1) rotate(0deg); opacity: 0.15; }
+    50% { transform: scale(1.08) rotate(8deg); opacity: 0.22; }
+    100% { transform: scale(1) rotate(0deg); opacity: 0.15; }
+}
+.galaxy-layer.distorted {
+    animation: galaxyDistort 1.4s ease forwards;
+}
+
+/* ===== SHOCKWAVE ===== */
+.shockwave {
     position: fixed;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, black, #0a0a0a 40%, transparent 70%);
-    box-shadow: 0 0 60px rgba(0,0,0,0.8);
-    animation: blackHoleSpin 2.5s linear forwards;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.8);
+    transform: translate(-50%, -50%) scale(0.1);
+    opacity: 0.9;
     pointer-events: none;
-    z-index: 999;
+    z-index: 998;
+    animation: shockwaveExpand 1.2s ease-out forwards;
 }
-@keyframes blackHoleSpin {
-    0% { transform: translate(-50%, -50%) scale(0.2) rotate(0deg); opacity: 0.8; }
-    40% { transform: translate(-50%, -50%) scale(1.2) rotate(180deg); opacity: 1; }
-    80% { transform: translate(-50%, -50%) scale(0.8) rotate(360deg); opacity: 0.7; }
-    100% { transform: translate(-50%, -50%) scale(0.1) rotate(540deg); opacity: 0; }
-}
-body.blackhole-distort {
-    filter: blur(2px) brightness(0.8);
-    transition: filter 0.3s ease;
+@keyframes shockwaveExpand {
+    0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0.9; }
+    80% { transform: translate(-50%, -50%) scale(4); opacity: 0.4; }
+    100% { transform: translate(-50%, -50%) scale(5); opacity: 0; }
 }
 
 /* ===== CONTAINER ===== */
@@ -406,7 +440,7 @@ img.addEventListener("touchend",()=>{
     if(drag){ drag=false; dx=vx*0.4; dy=vy*0.4; }
 });
 
-/* ===== STAR SUCK FUNCTION ===== */
+/* ===== STAR SUCK ===== */
 function suckStars() {
     const stars = document.querySelectorAll(".star");
     stars.forEach(star => {
@@ -415,20 +449,69 @@ function suckStars() {
     });
 }
 
-/* ===== BLACK HOLE BUTTON EFFECT ===== */
+/* ===== DUST SUCK ===== */
+function suckDust() {
+    const dusts = document.querySelectorAll(".dust");
+    dusts.forEach(d => {
+        d.classList.add("pulled");
+        setTimeout(() => d.classList.remove("pulled"), 1200);
+    });
+}
+
+/* ===== MOON + NEBULA + GALAXY TUG ===== */
+function tugMoonAndLayers() {
+    const moon = document.getElementById("orbit-moon");
+    const nebulas = document.querySelectorAll(".nebula-layer");
+    const galaxies = document.querySelectorAll(".galaxy-layer");
+
+    moon.classList.add("tugged");
+    nebulas.forEach(n => n.classList.add("warped"));
+    galaxies.forEach(g => g.classList.add("distorted"));
+
+    setTimeout(() => {
+        moon.classList.remove("tugged");
+        nebulas.forEach(n => n.classList.remove("warped"));
+        galaxies.forEach(g => g.classList.remove("distorted"));
+    }, 1500);
+}
+
+/* ===== SHOCKWAVE ===== */
+function spawnShockwaveAt(x, y) {
+    const wave = document.createElement("div");
+    wave.className = "shockwave";
+    wave.style.left = x + "px";
+    wave.style.top = y + "px";
+    document.body.appendChild(wave);
+    setTimeout(() => wave.remove(), 1300);
+}
+
+/* ===== BLACK HOLE BUTTON EFFECT (RANDOM POSITION) ===== */
 function spawnBlackHole() {
     document.body.classList.add("blackhole-distort");
 
-    const hole=document.createElement("div");
-    hole.className="black-hole";
+    const hole = document.createElement("div");
+    hole.className = "black-hole";
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const x = Math.random() * vw * 0.8 + vw * 0.1;
+    const y = Math.random() * vh * 0.6 + vh * 0.2;
+
+    hole.style.left = x + "px";
+    hole.style.top = y + "px";
+    hole.style.transform = "translate(-50%, -50%)";
+
     document.body.appendChild(hole);
 
-    suckStars(); // makes it suck a little
+    suckStars();
+    suckDust();
+    tugMoonAndLayers();
 
-    setTimeout(()=>{
+    setTimeout(() => {
+        spawnShockwaveAt(x, y);
         hole.remove();
         document.body.classList.remove("blackhole-distort");
-    },2500);
+    }, 2500);
 }
 
 /* ===== SINGLE MOON 3D ORBIT ===== */
