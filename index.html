@@ -6,7 +6,7 @@
     <title>Star Tailed</title>
 
     <style>
-        /* Animated Gradient Background */
+        /* Dark Cosmic Background */
         body {
             margin: 0;
             padding: 20px;
@@ -14,8 +14,9 @@
             font-family: Arial, sans-serif;
             color: #fff;
             overflow: hidden;
-            background: linear-gradient(45deg, #C7A400, #FFE600, #FF8A00, #C75A00);
-            background-size: 400% 400%;
+
+            background: linear-gradient(45deg, #0a0f3d, #1b004b);
+            background-size: 200% 200%;
             animation: gradientMove 18s ease infinite;
         }
 
@@ -25,7 +26,32 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* PARALLAX GALAXIES (deep background) */
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(45deg, #ffe600, #ffb300, #ff8a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: textGlow 6s ease infinite;
+        }
+
+        @keyframes textGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Neon Glow */
+        .neon {
+            text-shadow:
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px #ffdd55,
+                0 0 40px #ffdd55,
+                0 0 80px #ffdd55;
+        }
+
+        /* Parallax Galaxies */
         .galaxy-layer {
             position: fixed;
             top: 0;
@@ -57,7 +83,7 @@
             to { transform: translate(5%, 5%); }
         }
 
-        /* PARALLAX NEBULA LAYERS */
+        /* Parallax Nebula */
         .nebula-layer {
             position: fixed;
             top: 0;
@@ -108,7 +134,7 @@
             to { transform: translateY(-110vh); opacity: 0; }
         }
 
-        /* Floating Cosmic Dust */
+        /* Cosmic Dust */
         .dust {
             position: absolute;
             width: 2px;
@@ -144,53 +170,7 @@
             100% { opacity: 0; transform: translate(200px, -200px); }
         }
 
-        /* Neon Glow Text */
-        .neon {
-            color: #fff;
-            text-shadow:
-                0 0 5px #fff,
-                0 0 10px #fff,
-                0 0 20px #ffdd55,
-                0 0 40px #ffdd55,
-                0 0 80px #ffdd55;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        h1 {
-            font-size: 3.2em;
-            margin: 20px 0;
-        }
-
-        p {
-            font-size: 1.3em;
-            margin: 15px 0;
-        }
-
-        button {
-            background-color: #000;
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1.1em;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 10px;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #764ba2;
-            transform: scale(1.05);
-        }
-
-        /* Throwable Image with Squash & Stretch */
+        /* Throwable Image */
         #bouncer {
             position: absolute;
             width: 120px;
@@ -205,19 +185,23 @@
 
             transition: transform 0.12s ease-out;
         }
+
         #bouncer:active {
             cursor: grabbing;
         }
 
-        /* Floating Text Animations */
+        /* Floating Text */
         .floating-text {
             position: absolute;
-            color: rgba(255,255,255,0.85);
             font-size: 1.1em;
-            text-shadow: 0 0 6px rgba(255,255,255,0.7);
-            animation: floatText 18s linear infinite;
             pointer-events: none;
             z-index: 5;
+
+            background: linear-gradient(45deg, #ffe600, #ffb300, #ff8a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            animation: floatText 18s linear infinite;
         }
 
         @keyframes floatText {
@@ -226,6 +210,14 @@
             50% { transform: translateY(-40px); opacity: 0.7; }
             90% { opacity: 0.0; }
             100% { transform: translateY(-60px); opacity: 0; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
         }
     </style>
 </head>
@@ -236,7 +228,7 @@
     <div class="galaxy-layer galaxy-back"></div>
     <div class="galaxy-layer galaxy-mid"></div>
 
-    <!-- Parallax Nebula Layers -->
+    <!-- Parallax Nebula -->
     <div class="nebula-layer nebula-back"></div>
     <div class="nebula-layer nebula-mid"></div>
     <div class="nebula-layer nebula-front"></div>
@@ -249,17 +241,15 @@
     <!-- Throwable Image -->
     <img id="bouncer" src="Untitled7_20260822213709.png">
 
-    <!-- Floating Text (subtle, chill) -->
+    <!-- Floating Text -->
     <div class="floating-text" style="left: 10%; top: 70%;">Relax among the stars...</div>
     <div class="floating-text" style="left: 70%; top: 30%; animation-delay: 6s;">Gravity is optional here.</div>
     <div class="floating-text" style="left: 40%; top: 80%; animation-delay: 12s;">Welcome, traveler.</div>
 
     <div class="container">
-        <h1 class="neon">Welcome to The Star-Tailed!</h1>
-
-        <p class="neon">A cosmic place to relax...</p>
-        <p>Made by EnderCode7.</p>
-
+        <h1 class="gradient-text neon">Welcome to The Star-Tailed!</h1>
+        <p class="gradient-text neon">A cosmic place to relax...</p>
+        <p class="gradient-text">Made by EnderCode7.</p>
         <button onclick="alert('You clicked me!')">Click Me</button>
     </div>
 
@@ -292,7 +282,7 @@
 
         setInterval(createStar, 500);
 
-        /* Floating Cosmic Dust */
+        /* Cosmic Dust */
         function createDust() {
             const dust = document.createElement("div");
             dust.classList.add("dust");
@@ -311,7 +301,7 @@
         }
         setInterval(createDust, 5000);
 
-        /* Shooting Stars (subtle, rare) */
+        /* Shooting Stars */
         function createShootingStar() {
             const star = document.createElement("div");
             star.classList.add("shooting-star");
@@ -332,7 +322,7 @@
 
         setInterval(createShootingStar, 8000);
 
-        /* Physics-Based Draggable + Throwable Image (Mouse + Touch) + Squash & Stretch */
+        /* Throwable Ball Physics + Squash & Stretch */
         const img = document.getElementById("bouncer");
 
         let x = 200, y = 200;
