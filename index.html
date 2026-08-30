@@ -121,13 +121,16 @@
             transform: scale(1.05);
         }
 
-        /* Bouncing Image */
+        /* Draggable + Throwable Image */
         #bouncer {
             position: absolute;
             width: 120px;
             height: auto;
             z-index: 20;
-            pointer-events: none;
+            cursor: grab;
+        }
+        #bouncer:active {
+            cursor: grabbing;
         }
     </style>
 </head>
@@ -144,8 +147,8 @@
         <source src="your-music-file.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Bouncing Image -->
-    <img id="bouncer" src="Untitled7_20260822213709.png">
+    <!-- Draggable + Throwable Image -->
+    <img id="bouncer" src="your-image.png">
 
     <div class="container">
         <h1 class="neon">Welcome to The Star-Tailed!</h1>
@@ -185,38 +188,63 @@
 
         setInterval(createStar, 200);
 
-        /* Bouncing Image + Mouse Attraction */
+        /* Physics-Based Draggable + Throwable Image */
         const img = document.getElementById("bouncer");
 
-        let x = 200;
-        let y = 200;
-        let dx = 2.5;
-        let dy = 2.5;
+        let x = 200, y = 200;
+        let dx = 3, dy = 3;
+        let dragging = false;
+        let lastMouseX = 0, lastMouseY = 0;
 
-        function bounce() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
+        function physicsLoop() {
+            if (!dragging) {
+                x += dx;
+                y += dy;
 
-            x += dx;
-            y += dy;
+                dx *= 0.99;  // friction
+                dy *= 0.99;
 
-            if (x <= 0 || x + img.width >= w) dx *= -1;
-            if (y <= 0 || y + img.height >= h) dy *= -1;
+                const w = window.innerWidth;
+                const h = window.innerHeight;
 
-            img.style.left = x + "px";
-            img.style.top = y + "px";
+                if (x <= 0 || x + img.width >= w) dx *= -1;
+                if (y <= 0 || y + img.height >= h) dy *= -1;
 
-            requestAnimationFrame(bounce);
+                img.style.left = x + "px";
+                img.style.top = y + "px";
+            }
+
+            requestAnimationFrame(physicsLoop);
         }
+        physicsLoop();
 
-        bounce();
+        img.addEventListener("mousedown", (e) => {
+            dragging = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
 
         document.addEventListener("mousemove", (e) => {
-            const mx = e.clientX;
-            const my = e.clientY;
+            if (dragging) {
+                const mx = e.clientX;
+                const my = e.clientY;
 
-            dx += (mx - x) * 0.0005;
-            dy += (my - y) * 0.0005;
+                dx = mx - lastMouseX;
+                dy = my - lastMouseY;
+
+                x = mx - img.width / 2;
+                y = my - img.height / 2;
+
+                img.style.left = x + "px";
+                img.style.top = y + "px";
+
+                lastMouseX = mx;
+                lastMouseY = my;
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            dragging = false;
         });
     </script>
 
