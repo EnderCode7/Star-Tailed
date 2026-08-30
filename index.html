@@ -121,7 +121,7 @@
             transform: scale(1.05);
         }
 
-        /* Draggable + Throwable Image */
+        /* Throwable Image */
         #bouncer {
             position: absolute;
             width: 120px;
@@ -129,7 +129,7 @@
             z-index: 20;
             cursor: grab;
 
-            /* FIX: Prevent browser dragging */
+            /* Prevent browser dragging */
             user-drag: none;
             -webkit-user-drag: none;
             user-select: none;
@@ -153,7 +153,7 @@
         <source src="your-music-file.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Draggable + Throwable Image -->
+    <!-- Throwable Image -->
     <img id="bouncer" src="Untitled7_20260822213709.png">
 
     <div class="container">
@@ -201,10 +201,13 @@
         let dx = 3, dy = 3;
         let dragging = false;
 
-        let offsetX = 0;
-        let offsetY = 0;
+        let grabOffsetX = 0;
+        let grabOffsetY = 0;
 
-        /* FIX: Prevent browser dragging */
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+
+        /* Prevent browser dragging */
         img.addEventListener("dragstart", (e) => {
             e.preventDefault();
         });
@@ -236,8 +239,11 @@
 
             const rect = img.getBoundingClientRect();
 
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
+            grabOffsetX = e.clientX - rect.left;
+            grabOffsetY = e.clientY - rect.top;
+
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
 
             dx = 0;
             dy = 0;
@@ -245,11 +251,14 @@
 
         document.addEventListener("mousemove", (e) => {
             if (dragging) {
-                x = e.clientX - offsetX;
-                y = e.clientY - offsetY;
+                x = e.clientX - grabOffsetX;
+                y = e.clientY - grabOffsetY;
 
                 img.style.left = x + "px";
                 img.style.top = y + "px";
+
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
             }
         });
 
@@ -257,8 +266,8 @@
             if (dragging) {
                 dragging = false;
 
-                dx = (e.movementX || 0) * 0.8;
-                dy = (e.movementY || 0) * 0.8;
+                dx = (e.clientX - lastMouseX) * 0.5;
+                dy = (e.clientY - lastMouseY) * 0.5;
             }
         });
     </script>
